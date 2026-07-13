@@ -1,0 +1,8 @@
+name: AiChat
+version: '1-PRIVATE'
+main: lol.centrio.am.i.aiChat.AiChatPlugin
+api-version: '1.21'
+prefix: [ Nexus ]
+authors: [ Centrio_ ]
+description: idk some shit i made for NexusECO ig?
+website: i.am.centrio.lol
