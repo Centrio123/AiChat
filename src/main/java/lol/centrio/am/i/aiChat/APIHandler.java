@@ -13,10 +13,7 @@ public class APIHandler {
         String apiKey = plugin.getConfig().getString("api-key", "").trim();
         int maxLen = plugin.getConfig().getInt("max-length", 230); // Default to 230
 
-        // Define the instruction for the AI
         String currentDate = java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("EEEE, MMMM d, yyyy"));
-
-// Define the persona
         String systemInstruction = "You are a helpful AI assistant integrated into a Minecraft server. " +
                 "You are not a player, an entity, or a mob; you are a utility interface. " +
                 "Keep your answers concise, game-focused, and strictly under " + maxLen + " characters. " +
@@ -25,7 +22,6 @@ public class APIHandler {
         HttpClient client = HttpClient.newHttpClient();
         String escapedPrompt = prompt.replace("\"", "\\\"");
 
-        // Construct JSON payload with System role to enforce the limit
         String json = String.format(
                 "{\"model\": \"deepseek-ai/DeepSeek-V4-Pro\", \"messages\": [" +
                         "{\"role\": \"system\", \"content\": \"%s\"}," +
@@ -54,7 +50,6 @@ public class APIHandler {
                     .getAsJsonObject("message")
                     .get("content").getAsString();
 
-            // Final safety check to ensure it fits the Minecraft message requirement
             return aiContent.length() > maxLen ? aiContent.substring(0, maxLen - 3) + "..." : aiContent;
 
         } catch (Exception e) {

@@ -4,5 +4,5 @@ main: lol.centrio.am.i.aiChat.AiChatPlugin
 api-version: '1.21'
 prefix: [ Nexus ]
 authors: [ Centrio_ ]
-description: idk some shit i made for NexusECO ig?
+description: A simple DeepSeek ai chat-helper plugin. Talk to me with "@AI"
 website: i.am.centrio.lol

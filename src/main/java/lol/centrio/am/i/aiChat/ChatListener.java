@@ -17,7 +17,6 @@ public class ChatListener implements Listener {
         this.plugin = plugin;
     }
 
-    // Using MONITOR priority ensures we see the message after it has been finalized
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onChat(AsyncChatEvent event) {
         String msg = PlainTextComponentSerializer.plainText().serialize(event.message());
@@ -26,21 +25,14 @@ public class ChatListener implements Listener {
 
         String prompt = msg.replace("@AI", "").trim();
         String botName = plugin.getConfig().getString("bot-name", "DeepSeek");
-
-        // We run the API call asynchronously so the chat doesn't lag
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             String response = APIHandler.getAIResponse(plugin, prompt);
             int maxLen = plugin.getConfig().getInt("max-length", 100);
-
             if (response.length() > maxLen) {
                 response = response.substring(0, maxLen) + "...";
             }
-
-            // Build the AI component
             Component fullMessage = Component.text(botName + ": ").color(NamedTextColor.GREEN)
                     .append(Component.text(response).color(NamedTextColor.WHITE));
-
-            // Broadcast the AI response to everyone
             Bukkit.broadcast(fullMessage);
         });
     }
