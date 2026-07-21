@@ -1,5 +1,7 @@
 api-key: "YOUR_DEEPSEEK_API_KEY_HERE" #Deepseek is the only AI api you can use with this plugin, i have not planned to add multiple-model/api support in the future unless requested.
 bot-name: "DeepSeek" #The bot name that will be sent in chat before the AI's response.
 max-length: 100 # Recommended to keep lower to ensure it doesn't flood chat. I personally use 230 to ensure the name fits but its up to you!
+memory-enabled: true
+max-history: 5 # How many previous messages to remember per player
 
 # Thank you for using AiChat!!!

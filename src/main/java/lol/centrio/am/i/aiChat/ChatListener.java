@@ -4,10 +4,13 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import io.papermc.paper.event.player.AsyncChatEvent;
+
+import java.util.UUID;
 
 public class ChatListener implements Listener {
 
@@ -25,8 +28,12 @@ public class ChatListener implements Listener {
 
         String prompt = msg.replace("@AI", "").trim();
         String botName = plugin.getConfig().getString("bot-name", "DeepSeek");
+
+        Player player = event.getPlayer();
+        UUID playerUuid = player.getUniqueId();
+
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            String response = APIHandler.getAIResponse(plugin, prompt);
+            String response = APIHandler.getAIResponse(plugin, prompt, playerUuid);
             int maxLen = plugin.getConfig().getInt("max-length", 100);
             if (response.length() > maxLen) {
                 response = response.substring(0, maxLen) + "...";
