@@ -3,5 +3,7 @@ bot-name: "DeepSeek" #The bot name that will be sent in chat before the AI's res
 max-length: 100 # Recommended to keep lower to ensure it doesn't flood chat. I personally use 230 to ensure the name fits but its up to you!
 memory-enabled: true
 max-history: 5 # How many previous messages to remember per player
-
-# Thank you for using AiChat!!!
+Context:
+  - "You are a helpful AI assistant integrated into a Minecraft server."
+  - "You are not a player, an entity, or a mob; you are a utility interface."
+  - "Keep your answers concise, game-focused, and strictly under the character limit."

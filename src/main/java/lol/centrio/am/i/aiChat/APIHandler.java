@@ -1,8 +1,9 @@
 package lol.centrio.am.i.aiChat;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -20,18 +21,40 @@ public class APIHandler {
         boolean memoryEnabled = plugin.getConfig().getBoolean("memory-enabled", true);
         int maxHistory = plugin.getConfig().getInt("max-history", 5);
 
-        String currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("EEEE, MMMM d, yyyy"));
+        List<String> contextLines = plugin.getConfig().getStringList("Context");
+        StringBuilder systemInstructionBuilder = new StringBuilder();
 
-        String systemInstruction = "You are a helpful AI assistant integrated into a Minecraft server. " +
-                "You are not a player, an entity, or a mob; you are a utility interface. " +
-                "Keep your answers concise, game-focused, and strictly under " + maxLen + " characters. " +
-                "The current date is " + currentDate + ".";
+        if (contextLines.isEmpty()) {
+            systemInstructionBuilder.append("You are a helpful AI assistant on a Minecraft server.");
+        } else {
+            for (String line : contextLines) {
+                systemInstructionBuilder.append(line).append(" ");
+            }
+        }
+
+        // Get the player's name safely from their UUID
+        String playerName = "Player";
+        if (playerUuid != null) {
+            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerUuid);
+            if (offlinePlayer.getName() != null) {
+                playerName = offlinePlayer.getName();
+            }
+        }
+
+        // Append player identity and current date to the system instruction
+        systemInstructionBuilder.append(" The player currently talking to you is named ").append(playerName).append(".");
+
+        String currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("EEEE, MMMM d, yyyy"));
+        systemInstructionBuilder.append(" The current date is ").append(currentDate).append(".");
+        systemInstructionBuilder.append(" Keep your response strictly under ").append(maxLen).append(" characters.");
+
+        String systemInstruction = systemInstructionBuilder.toString();
 
         HttpClient client = HttpClient.newHttpClient();
         String escapedPrompt = prompt.replace("\"", "\\\"");
 
         StringBuilder jsonMessages = new StringBuilder();
-        jsonMessages.append(String.format("{\"role\": \"system\", \"content\": \"%s\"}", systemInstruction));
+        jsonMessages.append(String.format("{\"role\": \"system\", \"content\": \"%s\"}", systemInstruction.replace("\"", "\\\"")));
 
         if (memoryEnabled && playerUuid != null) {
             List<ChatMemory.ChatMessage> history = ChatMemory.getHistory(playerUuid);
