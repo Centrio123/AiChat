@@ -1,7 +1,7 @@
 name: AiChat
 version: '1-PRIVATE'
 main: lol.centrio.am.i.aiChat.AiChatPlugin
-api-version: '26.1'
+api-version: '1.26'
 prefix: [ Nexus ]
 authors: [ Centrio_ ]
 description: A simple DeepSeek ai chat-helper plugin. Talk to me with "@AI"

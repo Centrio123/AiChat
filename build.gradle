@@ -4,21 +4,21 @@ plugins {
 }
 
 group = 'lol.centrio.am.i'
-version = '1-PRIVATE'
+version = '26.2-PRIVATE'
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
+    compileOnly "io.papermc.paper:paper-api:26.2.build.+"
 }
 
 tasks {
     runServer {
-        minecraftVersion("1.21.4")
+        minecraftVersion("1.26.2")
     }
 }
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(22)
+        languageVersion = JavaLanguageVersion.of(25)
     }
 }
 
