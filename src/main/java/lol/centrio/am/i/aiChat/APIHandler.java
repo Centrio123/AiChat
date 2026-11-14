@@ -41,7 +41,6 @@ public class APIHandler {
             }
         }
 
-        // Append player identity and current date to the system instruction
         systemInstructionBuilder.append(" The player currently talking to you is named ").append(playerName).append(".");
 
         String currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("EEEE, MMMM d, yyyy"));

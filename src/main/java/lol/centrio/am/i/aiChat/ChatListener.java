@@ -32,7 +32,7 @@ public class ChatListener implements Listener {
         Player player = event.getPlayer();
         UUID playerUuid = player.getUniqueId();
 
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+        Bukkit.getAsyncScheduler().runNow(plugin, scheduledTask -> {
             String response = APIHandler.getAIResponse(plugin, prompt, playerUuid);
             int maxLen = plugin.getConfig().getInt("max-length", 100);
             if (response.length() > maxLen) {
@@ -40,7 +40,10 @@ public class ChatListener implements Listener {
             }
             Component fullMessage = Component.text(botName + ": ").color(NamedTextColor.GREEN)
                     .append(Component.text(response).color(NamedTextColor.WHITE));
-            Bukkit.broadcast(fullMessage);
+
+            Bukkit.getGlobalRegionScheduler().execute(plugin, () -> {
+                Bukkit.broadcast(fullMessage);
+            });
         });
     }
 }

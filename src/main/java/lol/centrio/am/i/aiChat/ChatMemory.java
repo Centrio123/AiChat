@@ -1,9 +1,11 @@
 package lol.centrio.am.i.aiChat;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ChatMemory {
-    private static final Map<UUID, List<ChatMessage>> historyMap = new HashMap<>();
+    private static final Map<UUID, List<ChatMessage>> historyMap = new ConcurrentHashMap<>();
 
     public static class ChatMessage {
         public String role; // "user" or "assistant"
@@ -16,13 +18,15 @@ public class ChatMemory {
     }
 
     public static void addMessage(UUID uuid, String role, String content, int maxHistory) {
-        historyMap.putIfAbsent(uuid, new ArrayList<>());
+        historyMap.putIfAbsent(uuid, new CopyOnWriteArrayList<>());
         List<ChatMessage> history = historyMap.get(uuid);
 
         history.add(new ChatMessage(role, content));
 
         while (history.size() > (maxHistory * 2)) {
-            history.remove(0);
+            if (!history.isEmpty()) {
+                history.remove(0);
+            }
         }
     }
 
